@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %} {% endblock %}</title>
+
+    {% load static %}
+        <link rel="stylesheet" href="{% static 'invent/css/base.css' %}">
+    {% block static_files %}
+    {% endblock %}
+
+    <style>
+        {% block style %} {% endblock %}
+    </style>
+
+</head>
+<body class="img-background">
+    <div>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">
+                        <!--{{ message|safe }}-->
+                        {{ message }}
+                        <a href="" class="close">✖</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    {% block body %} {% endblock %}
+
+    <script>
+        {% block script %} {% endblock %}
+    </script>
+
+</body>
+</html>

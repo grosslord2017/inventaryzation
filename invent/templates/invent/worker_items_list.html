@@ -1,0 +1,76 @@
+{% extends "invent/base.html" %}
+
+{% load static %}
+{% block static_files %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'invent/css/moving_item_list.css' %}">
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+    <div class="return">
+        <button class="return_btn" onclick="window.location.href='{% url 'home' %}'">return</button>
+        <h3>{{ worker.surname }} {{ worker.name }}, {{ worker.location }}</h3>
+    </div>
+    <div>
+        <table>
+            <tr class="heder">
+                <th>Ім'я</th>
+                <th>Модель</th>
+                <th>Серійний номер</th>
+                <th>Опис</th>
+                <th>Дата купівлі</th>
+                <th>Ціна</th>
+                {% if user.is_superuser %}
+                    <th>Списать</th>
+                {% endif %}
+            </tr>
+            {% for item in items %}
+                <tr class="content">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.model }}</td>
+                    <td>{{ item.serial }}</td>
+                    <td>{{ item.description|linebreaks }}</td>
+                    <td>{{ item.date_of_purchase }}</td>
+                    <td>{{ item.price }} грн.</td>
+                    {% if user.is_superuser %}
+                        <td>
+                            <button class="decommissioned_btn" onclick="confirm_remove({{ item.id }})">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+{% endblock %}
+
+<script>
+    {% block script %}
+
+        // ajax request for decommissioned item. For finish - reloadweb page.
+        function confirm_remove (item_id) {
+            console.log(item_id);
+            var locationURL = "{% url 'ajax_decommissioned' %}"
+            csrfToken = '{{ csrf_token }}';
+            if (confirm('Вы действительно хотите списать данный эелемент?')) {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", locationURL);
+                xmlhttp.setRequestHeader("content-type", "application/json");
+                xmlhttp.setRequestHeader("X-CSRFToken", csrfToken);
+                xmlhttp.send(JSON.stringify({item_id: item_id}));
+            
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        location.reload();
+                    }
+                }
+            }
+        }
+
+    {% endblock %}
+</script>

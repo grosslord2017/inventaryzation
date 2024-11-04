@@ -1,0 +1,15 @@
+{% extends "invent/base.html" %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+    <h3>{{ item.name }} {{ item.model }}</h3>
+    <p>{{ item.name }}</p>
+    <p>{{ item.model }}</p>
+    <p>{{ item.serial }}</p>
+    <p>{{ item.description|linebreaks }}</p>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

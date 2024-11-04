@@ -1,0 +1,87 @@
+{% extends "invent/base.html" %}
+
+{% load static %}
+{% block static_files %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'invent/css/items_list.css'%}">
+{% endblock %}
+
+{% block style %}
+   
+{% endblock %}
+
+{% block body %}
+
+    <div class="box">
+        <div class="return">
+            <button class="btn btn-danger" onclick="window.location.href='{% url 'home' %}'">Назад</button>
+        </div>
+        
+        <div class="head">
+            {% for item in items|slice:"0:1" %}
+                <h3>{{ item.name }}</h3>
+            {% endfor %}
+        </div>
+    </div>
+
+    <table>
+        <tr class="heder">
+            <th>Об'єкт</th>
+            <th>Модель</th>
+            <th>Серійний номер</th>
+            <th>Опис</th>
+            <th>Ціна</th>
+            <th>Дата купівлі</th>
+            {% if user.is_superuser %}
+                <th>Списа</th>
+            {% endif %}
+        </tr>
+        {% for item in items %}
+            {% if not item.is_decommissioned %}
+                <tr class="content">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.model }}</td>
+                    <td>{{ item.serial }}</td>
+                    <td>{{ item.description|linebreaks }}</td>
+                    <td>{{ item.price }} грн.</td> 
+                    <td>{{ item.date_of_purchase }}</td>
+                    {% if user.is_superuser %}
+                        <td>
+                            <button class="decommissioned_btn" onclick="confirm_remove({{ item.id }})">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+        
+    </table>
+
+{% endblock %}
+
+<script>
+    {% block script %}
+
+        // ajax request for decommissioned item. For finish - reloadweb page.
+        function confirm_remove (item_id) {
+            console.log(item_id);
+            var locationURL = "{% url 'ajax_decommissioned' %}"
+            csrfToken = '{{ csrf_token }}';
+            if (confirm('Вы действительно хотите списать данный эелемент?')) {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", locationURL);
+                xmlhttp.setRequestHeader("content-type", "application/json");
+                xmlhttp.setRequestHeader("X-CSRFToken", csrfToken);
+                xmlhttp.send(JSON.stringify({item_id: item_id}));
+            
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        location.reload();
+                    }
+                }
+            }
+        }
+
+    {% endblock %}
+</script>
