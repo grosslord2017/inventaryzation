@@ -3,10 +3,10 @@ from .models import Worker, Item, Location
 from django.forms.widgets import Textarea, SelectDateWidget, SelectMultiple, NumberInput
 
 
-class UserLoginForm(forms.Form):
-
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)
+# class UserLoginForm(forms.Form):
+#
+#     username = forms.CharField()
+#     password = forms.CharField(widget=forms.PasswordInput)
 
 
 class AddNewItem(forms.ModelForm):

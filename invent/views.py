@@ -4,36 +4,14 @@ import json
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.models import User
 from django.http.response import JsonResponse
-from django.contrib.auth import login, logout, authenticate
 
-from .forms import UserLoginForm, AddNewItem
+from .forms import AddNewItem
 from .models import Item, Worker, Location, History
 from django.contrib import messages
 from .services import add_to_history
 from django.contrib.auth.decorators import user_passes_test, login_required, permission_required
 
-
 # Create your views here.
-
-
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect('/invent/')
-
-
-def user_login(request):
-    if request.method == 'POST':
-        user_login_form = UserLoginForm(request.POST)
-        if user_login_form.is_valid():
-            data = user_login_form.cleaned_data
-            user = authenticate(username=data['username'], password=data['password'])
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return HttpResponseRedirect('/invent')
-
-    user_login_form = UserLoginForm()
-    return render(request, 'invent/login.html', {'login_form': user_login_form})
 
 
 def home(request):

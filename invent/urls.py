@@ -5,8 +5,6 @@ from django.conf import settings
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('logout', views.user_logout, name='logout'),
-    path('login', views.user_login, name='login'),
     path('items/<pk>/', views.items_list, name='items_list'),
     path('worker_item/<int:pk>', views.worker_items_list, name='worker_items_list'),
     path('adding_new_item', views.add_new_item, name='adding'),
