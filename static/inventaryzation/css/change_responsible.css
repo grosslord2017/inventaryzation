@@ -1,0 +1,108 @@
+body {
+    height: 100vh;
+    /* тут вставляється фонове зображення */
+    /*background-image: url("back_3.png");*/
+
+}
+.main_class {
+    display:list-item;
+    height: 100vh;
+    color:aliceblue;
+}
+.select_zone {
+    display: flex;
+    width: 100%;
+    height: 15%;
+    justify-content: space-evenly 0px;
+    border: solid;
+    border-radius: 8px;
+}
+.return_button {
+    margin: 1% 1%;
+    height: 50%;
+}
+.return_button button {
+    background: #B22222;
+    padding: 10px 10px;
+}
+
+.return_button button:hover {
+    background: #F08080;
+}
+.select_user_1_zone {
+    display: block;
+    width: 40%;
+    height: 100%;
+    text-align: center;
+}
+.select_user_1_zone select {
+    width: 50%;
+    height: 30%;
+    margin: auto auto;
+}
+.select_user_1_zone p {
+    width: 50%;
+    height: 20%;
+}
+.user_1_text {
+    margin: 3% auto;
+    font-size: 14px;
+}
+.submit_button {
+    margin-left: 2%;
+    margin-top: 1%;
+    width: 20%;
+    height: 55%;
+}
+.submit_button button {
+    margin-top: 8%;
+    width: 80%;
+    height: 80%;
+}
+
+.activate {
+    background: #228b22;
+}
+
+.select_user_2_zone {
+    display: block;
+    width: 40%;
+    height: 100%;
+    margin-right: 1%;
+    text-align: center;
+}
+.select_user_2_zone input {
+    width: 50%;
+    height: 30%;
+    margin: -1% 23%;
+}
+.select_user_2_zone p {
+    width: 50%;
+    height: 20%;
+}
+.user_2_text {
+    margin: 3% auto;
+    font-size: 14px;
+}
+
+.table_zone {
+    margin-top: 5px;
+    width: 100%;
+    height: 85%;
+}
+table {
+    width: 100%;
+}
+.header th{
+    border: solid;
+    border-width: 2px;
+}
+.table-body {
+    border: solid;
+}
+.table-body td{
+    text-align: center;
+}
+.checkbox {
+    width: 5%;
+}

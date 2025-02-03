@@ -1,0 +1,92 @@
+{% extends "invent/base.html" %}
+
+{%load static%}
+{% block static_files %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'invent/css/download.css' %}">
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+
+    <button class="return_btn" onclick="window.location.href='{% url 'inventaryzation' %}'">Назад</button>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <h2>Які категорії вивантажити:</h2>
+        <p class='row'>
+            <input id="all_items" type="checkbox" name="all_items">
+            <label for="all_items">Всі об'єкти</label>
+        </p>
+        <p class='row'>
+            <input class="category" id="all_cars" type="checkbox" name="all_cars">
+            <label class="through" for="all_cars">Автомобілі</label>
+        </p>
+        <p class='row'>
+            <input class="category" id="all_furnitures" type="checkbox" name="all_furnitures">
+            <label class="through" for="all_furnitures">Меблі</label>
+        </p>
+        <p class='row'>
+            <input class="category" id="all_bulddings" type="checkbox" name="all_bulddings">
+            <label class="through" for="all_bulddings">Будівлі</label>
+        </p>
+        <p class='row'>
+            <input class="category" id="all_office_equipments" type="checkbox" name="all_office_equipments">
+            <label class="through" for="all_office_equipments">Орг.техніка</label>
+        </p>
+        <p class='row'>
+            <input class="category" id="all_peripheres" type="checkbox" name="all_peripheres">
+            <label class="through" for="all_peripheres">Периферія</label>
+        </p>
+        <p class='row'>
+            <input class="category" id="all_PC_and_laptops" type="checkbox" name="all_PC_and_laptops">
+            <label class="through" for="all_PC_and_laptops">Ноутбуки та ПК</label>
+        </p>
+        <p class='row'>
+            <input class="category" id="all_smartphone_and_tablet" type="checkbox" name="all_smartphone_and_tablet">
+            <label class="through" for="all_smartphone_and_tablet">Смартфони та Планшети</label>
+        </p>
+        <p class='row'>
+            <input class="category" id="all_warehouse_equipment" type="checkbox" name="all_warehouse_equipment">
+            <label class="through" for="all_warehouse_equipment">Складське обладнання</label>
+        </p>
+        <p class='row'>
+            <input class="category" id="all_interior_items" type="checkbox" name="all_interior_items">
+            <label class="through" for="all_interior_items">Предмети інет'єру</label>
+        </p>
+
+        <button class="submit"><i class="fa fa-download"></i> Завантажити</button>
+    </form>
+
+    <script>
+
+        const checkbox = document.getElementById('all_items');
+        checkbox.addEventListener('change', () => {
+    
+            let row = document.getElementsByClassName('row');
+            if (checkbox.checked == true) {
+                all_changed(row, true);
+            } else {
+                all_changed(row, false);
+            };
+
+        })
+
+        function all_changed(row, flag) {
+            for (let i=1; i<row.length; i++) {
+                row[i].getElementsByClassName('category')[0].disabled = flag;
+                if (flag === true){
+                    row[i].getElementsByClassName('through')[0].classList.add('line-through');
+                } else {
+                    row[i].getElementsByClassName('through')[0].classList.remove('line-through');
+                };
+            };
+        }
+
+    </script>
+
+
+{% endblock %}

@@ -1,0 +1,93 @@
+.count {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+.count input {
+    width: 40%;
+    padding: 10px 10px;
+    /*margin-left: 25%;*/
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+#quantity-button {
+    background: #228b22;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#quantity-button:hover {
+    background: #90ee90;
+}
+
+#print {
+    margin-left: 5px;
+    background-color: rgb(238, 139, 10);
+}
+#print:hover {
+    background-color: rgb(236, 186, 119);
+}
+
+.return {
+    background: #B22222;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.return:hover {
+    background: #F08080;
+}
+
+.barcode-list {
+    display: flex;
+    flex-wrap: wrap;
+    /*justify-content: space-between;*/
+    justify-content: start;
+    width: 100%;
+}
+
+svg {
+    margin: 5px;
+    width: auto;
+}
+
+
+/* Стиль для печати */
+@media print {
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    .count {
+        /*visibility: hidden;*/
+        display: none !important;
+    }
+
+    html, body {
+        width: 210mm;
+        height: 297mm;
+    }
+
+    .barcode-list {
+        visibility: visible;
+        width: 100%;
+        display: flex;
+        justify-content: left;
+    }
+
+    svg {
+        /*margin-left: -6px;*/
+        margin-right: 0.3cm;
+    }
+
+    
+}

@@ -1,0 +1,185 @@
+{% extends "inventaryzation/base.html" %}
+
+{%load static%}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'inventaryzation/css/change_responsible.css' %}">
+{% endblock %}
+
+
+{% block style %}
+{% endblock %}
+
+
+{% block body %}
+
+    <form id="change" method="POST" action="change_responsible">
+        {% csrf_token %}
+        <div class="main_class">
+            <div class="select_zone">
+                <div class="return_button">
+                    <button class="return_btn" type="button" onclick="window.location.href='/inventaryzation'">Назад</button>
+                </div>
+                <div class="select_user_1_zone">
+                    <p class="user_1_text">Оберіть користувача від якого передаються ОЗ:</p>
+                    <select class="worker" name="select_first_user">
+                        <option value=""></option>
+                        {% for worker in all_workers %}
+                            <option value="{{worker}}">{{ worker }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="submit_button">
+                    <button class="sbmt" type="submit" form="change" disabled>Передати</button>
+                </div>
+                <div class="select_user_2_zone">
+                    <p class="user_2_text">Введіть користувача до якого передаються ОЗ:</p>
+                    <input list="workers" class="worker2" name="select_second_user" placeholder="прізвище та ім'я">
+                    <datalist id="workers">
+                        {% for worker in all_workers %}
+                            <option value="{{worker}}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+            </div>
+            
+            <div class="table_zone">
+                <table>
+                    <thead>
+                        <tr class="header">
+                            <th class="checkbox"><input class="all_check" type="checkbox"></th>
+                            <th>Найменування юридичної (фізичної) особи, що передає основні засоби</th>
+                            <th>Найменування ОЗ</th>
+                            <th>Серійний номер</th>
+                            <th>Інвентарний (номенклатурний) номер</th>
+                            <th>Первісна (переоцінена) вартість ОЗ</th>
+                            <th>Дата прийняття на облік</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody class="table-body">  
+                    </tbody>
+                
+                </table>
+            </div>
+        </div>
+    </form>
+
+
+
+    <script>
+
+        //-----------------------------------------------------------//
+        // AJAX для подтягивания материальных обьектов по пользователю
+        const itemsInResponsibleURL = "{% url 'items_in_responsible' %}";
+        const csrfToken = '{{ csrf_token }}';
+        const worker = document.querySelector(".worker");
+        const all_check = document.querySelector(".all_check");
+        
+        worker.addEventListener("change", ()=> {
+            const item = worker.value;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("POST", itemsInResponsibleURL);
+            xmlhttp.setRequestHeader("X-CSRFToken", csrfToken);
+            xmlhttp.send(JSON.stringify({item: item}));
+
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    var response = JSON.parse(this.responseText);
+                    var items = response['items_list'];
+
+                    parseItem(items);
+
+                };
+            };
+        });
+
+        //---------------------------------------------------------//
+        // Парсинг материальных обьектов и добавление в таблицу
+        function parseItem(items) {
+            let tbody = document.querySelector(".table-body");
+            tbody.innerHTML = "";
+
+            for (let i=0; i<items.length; i++) {
+                
+                let tdCheck = document.createElement("td"); //создание первого обязательного td с чекбоксом
+                tdCheck.classList.add("checkbox");
+                
+                let checkbox = document.createElement("input"); // создание input с типом checkbox
+                checkbox.classList.add("ch");
+                checkbox.type = "checkbox";
+                checkbox.name = "serial";
+                checkbox.value = items[i][4];
+
+                tdCheck.appendChild(checkbox); // вкладываем input в первый обязательный td
+
+                let tr = document.createElement("tr"); // вкладываем первый обязательный td в tr
+                tr.appendChild(tdCheck);
+                
+                let tdRespons = document.createElement("td");
+                let tdModel = document.createElement("td");
+                let tdSerial = document.createElement("td");
+                let tdInvent = document.createElement("td");
+                let tdPrice = document.createElement("td");
+                let tdDate = document.createElement("td");
+                tdRespons.innerHTML = items[i][7];
+                if (items[i][3] === '-' || items[i][3] === '') {
+                    tdModel.innerHTML = items[i][2];
+                } else {
+                    tdModel.innerHTML = items[i][2] + " " + items[i][3];
+                };
+                tdSerial.innerHTML = items[i][4];
+                tdInvent.innerHTML = items[i][5];
+                if (items[i][9] !== 0) {
+                    tdPrice.innerHTML = items[i][9] + " грн";
+                } else {
+                    tdPrice.innerHTML = items[i][11] + " грн";
+                };
+                if (items[i][10] !== null) {
+                    tdDate.innerHTML = items[i][10];
+                } else {
+                    tdDate.innerHTML = items[i][12]
+                };
+                
+                tr.appendChild(tdRespons);
+                tr.appendChild(tdModel);
+                tr.appendChild(tdSerial);
+                tr.appendChild(tdInvent);
+                tr.appendChild(tdPrice);
+                tr.appendChild(tdDate);
+
+                tbody.appendChild(tr);
+            };
+
+        };
+
+        //-----------------------------------------------------------------//
+        /* при нажатии на чекбокс в шапке таблицы - нажимаются все чекбоксы */
+        all_check.addEventListener("click", ()=> {
+            let all_ch = document.getElementsByClassName("ch");
+            for (let i=0; i<all_ch.length; i++) {
+                if (all_check.checked === true) {
+                    all_ch[i].checked = true;
+                } else {
+                    all_ch[i].checked = false;
+                };
+            };
+        });
+
+        // активация кнопки если в инпут что-то вписано и выбрано хоть один чекбокс //
+        const worker2 = document.querySelector(".worker2");
+        const btnSbmt = document.querySelector(".sbmt");
+
+        worker2.addEventListener("input", ()=> {
+            if (worker2.value !== "") {
+                btnSbmt.disabled = false;
+                btnSbmt.classList.add("activate");
+            } else {
+                btnSbmt.disabled = true;
+                btnSbmt.classList.remove("activate");
+            };
+        });
+
+
+    </script>
+
+{% endblock %}

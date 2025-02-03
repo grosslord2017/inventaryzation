@@ -1,0 +1,47 @@
+{% extends "invent/base.html" %}
+
+{%load static%}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'invent/css/history.css' %}">
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="box">
+        <div class="return">
+            <button class="btn btn-danger" onclick="window.location.href='{% url 'home' %}'">Return</button>
+        </div>
+        
+        <div class="head">
+            {% for item in items|slice:"0:1" %}
+                <h3>{{ item.name }}</h3>
+            {% endfor %}
+        </div>
+    </div>
+
+    <table>
+        <tr class="heder">
+            <th>Користувач</th>
+            <th>Дія</th>
+            <th>Об'єкт</th>
+            <th>Серійний номер</th>
+            <th>Опис</th>
+            <th>Дата</th>
+        </tr>
+        {% for entrie in all_entries %}
+            <tr class="content">
+                <td>{{ entrie.user }}</td>
+                <td>{{ entrie.action }}</td>
+                <td>{{ entrie.obj }}</td>
+                <td>{{ entrie.obj.serial }}</td>
+                <td>{{ entrie.description|linebreaks }}</td>
+                <td>{{ entrie.date }}</td> 
+            </tr>
+        {% endfor %}
+        
+    </table>
+
+{% endblock %}

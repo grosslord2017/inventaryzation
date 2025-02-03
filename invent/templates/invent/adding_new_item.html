@@ -1,0 +1,27 @@
+{% extends "invent/base.html" %}
+
+{%load static%}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'invent/css/adding_new_item.css' %}">
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="return">
+        <button class="return_btn" onclick="window.location.href='{% url 'home' %}'">Return</button>
+        <h2>Додавання нової техніки</h2>
+    </div>
+    <div class='adding_item'>
+        <form method='POST'>
+            {% csrf_token %}
+                
+            {{add_new.as_p}}
+            
+            <input class="submit_btn" type="submit"></input>
+        </form>
+    </div>
+
+{% endblock %}

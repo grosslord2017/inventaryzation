@@ -1,0 +1,71 @@
+{% extends "inventaryzation/base.html" %}
+
+{%load static%}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'inventaryzation/css/jurnal.css' %}">
+    <script src="{% static 'inventaryzation/js/jurnal.js' %}"></script>
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+    <div class="up_menu">
+        <button class="back_button" onclick="window.location.href='{% url 'inventaryzation' %}'">Назад</button>
+        <p class="search_text">Пошук:</p>
+        <input class="search_input" placeholder="пошук по інвентарному номеру чи дійових особах">
+        <p class="filter_text">Фільтри:</p>
+        <!--<button class="filter_data_button">Дата</button>-->
+        <!--<button class="filter_operation_type_button">Операція</button>-->
+        <input class="filter_data_button" type="date" id="date" value="" min="2025-01-01" max="" />
+        <select class="filter_operation_type_button">
+            <option id="---">---</option>
+            <option id="Прийняття на облік">Прийняття на облік</option>
+            <option id="Зміна МВО">Зміна МВО</option>
+            <option id="Списання">Списання</option>
+        </select>
+
+    </div>
+    
+    <div class="main_class">
+        {% for i in info %}
+            <div class="content_block">
+                <div class="content_top">
+                    <div class="ID_zone"><p>ID: {{ i.id }}</p></div>
+                    <div class="operation_name_zone"><p>{{ i.operation }}</p></div>
+                    <div class="from_who_zone"><p>{{ i.from_whom }}</p></div>
+                    <div class="arrow_zone">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                            viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                            <path d="M2.9,51.6h87.6l-7.7,7.6c-1,1-1,2.6,0,3.5l0,0c1,1,2.6,1,3.5,0l12.9-13c0.4-0.4,0.4-1,0-1.4l-12.9-13c-1-1-2.6-1-3.5,0l0,0
+                                c-1,1-1,2.6,0,3.5l7.7,7.6H2.9c-1.4,0-2.5,1.1-2.5,2.5l0,0C0.4,50.5,1.5,51.6,2.9,51.6z"/>
+                        </svg>
+                    </div>
+                    <div class="to_who_zone"><p>{{ i.to_whom }}</p></div>
+                </div>
+                <div class="content_middle">
+                    <div class="content_middle_top">
+                        <div class="name_model_title"><p>Назва та модель</p></div>
+                        <div class="serial_number_title"><p>Серійний номер</p></div>
+                        <div class="inv_number_title"><p>Інвентарний номер</p></div>
+                    </div>
+                    <div class="content_middle_bottom">
+                        <div class="name_model_zone"><p>{{ i.item.0 }}</p></div>
+                        <div class="serial_number_zone"><p>{{ i.item.1 }}</p></div>
+                        <div id="{{i.item.2}}" class="inv_number_zone"><p>{{ i.item.2 }}</p></div>
+                    </div>
+                </div>
+                <div class="content_bottom">
+                    <div class="name_file_zone" onclick="window.location.href='{{ i.act_id.file.url }}'">
+                        <p>{{ i.act_id }}</p>
+                    </div>
+                    <div class="author_name_zone"><p>{{ i.autor }}</p></div>
+                    <div class="operation_date_zone">
+                        <p class="{{i.date_operation|date:'Y-m-d'}}">{{ i.date_operation }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

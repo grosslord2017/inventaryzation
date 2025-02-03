@@ -1,0 +1,61 @@
+{% extends "inventaryzation/base.html" %}
+
+{%load static%}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'inventaryzation/css/all_acts.css' %}">
+    <script src="{% static 'inventaryzation/js/all_acts.js' %}"></script>
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+    <div class="up_menu">
+        <button class="back_button" onclick="window.location.href='{% url 'inventaryzation' %}'">НАЗАД</button>
+        <p class="search_text">Пошук:</p>
+        <input class="search_input" placeholder="пошук по ID або по номеру документа">
+        <p class="filter_text">Фільтри:</p>
+        <!--<button class="filter_data_button">Дата</button>-->
+        <!--<button class="filter_operation_type_button">Операція</button>-->
+        <input class="filter_data_button" type="date" id="date" value="" min="2025-01-01" max="" />
+        <select class="filter_operation_type_button">
+            <option id="---">---</option>
+            <option id="Прийняття на облік">Прийняття на облік</option>
+            <option id="Зміна МВО">Зміна МВО</option>
+            <option id="Списання">Списання</option>
+        </select>
+    </div>
+
+        
+    <div class="main_class">
+        {% for file in all_files %}
+            <div class="content_block">
+                <div class="content_id">{{ file.id }}</div>
+                <div class="content_name">{{ file }}</div>
+                <div class="content_operation">{{ file.operation }}</div>
+                <div class="content_date">{{ file.data_create | date:"Y-m-d" }}</div>
+                <div class="content_url" onclick="window.location.href='{{ file.file.url }}'">
+                    
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="64" 
+                        height="64" 
+                        viewBox="0 0 64 64" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        stroke-width="2" 
+                        stroke-linecap="round" 
+                        stroke-linejoin="round">
+                        <!-- Стрелка вниз -->
+                        <path d="M32 12v28" /> <!-- Линия стрелки -->
+                        <path d="M24 36l8 8 8-8" /> <!-- Линии для стрелки вниз -->
+                    
+                        <!-- Горизонтальная линия (основание) -->
+                        <path d="M16 52h32" />
+                    </svg>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+{% endblock %}

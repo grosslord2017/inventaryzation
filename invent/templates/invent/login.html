@@ -1,0 +1,34 @@
+{% extends "invent/base.html" %}
+
+{% block title %} login {% endblock %}
+
+{% load static %}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'invent/css/login.css' %}">
+{% endblock %}
+
+{% block style %}
+
+
+{% endblock %}
+
+{% block body %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="container">
+            {% for field in login_form %}
+                <label for="{{ field.name }}"><b>{{ field.name }}</b></label>
+                {% if field.name == 'password' %}
+                    <input type="password" placeholder="Enter Username" name="{{ field.name }}" required>
+                {% else %}
+                    <input type="text" placeholder="Enter Username" name="{{ field.name }}" required>
+                {% endif %}
+            {% endfor %}
+
+            <button type="submit">Login</button>
+        </div>
+    </form>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends "invent/base.html" %}
+
+{%load static%}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'invent/css/home.css' %}">
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+<!--Header-->
+{% block body %}
+    <div class="head_block">
+        <button class="return_btn" onclick="window.location.href='{% url 'home_page' %}'">Назад</button>
+        <p><b>{{ user.first_name }} {{ user.last_name }}</b> </p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">вихід</a>
+        {% endif %}
+    </div>
+
+<!--Menu buttons-->
+    <div class="tab">
+        <button class="tablinks" onclick="openMenu(event, 'workers')" id="defaultOpen">Список співробітників</button>
+        <button class="tablinks" onclick="openMenu(event, 'items')">Список техніки</button>
+        <button class="tablinks" onclick="openMenu(event, 'locations')">Робочі місця</button>
+        <button class="tablinks" onclick="openMenu(event, 'stock')">Резерв</button>
+        <button class="tablinks" onclick="openMenu(event, 'decommissioned')">Списання</button>
+
+
+        {% if user.is_superuser %}
+            <button class="tablinks" onclick="window.location.href='{% url 'adding' %}'">Нова техніка</button>
+            <button class="tablinks" onclick="window.location.href='{% url 'moving' %}'">Переміщення</button>
+            <button class="tablinks" onclick="window.location.href='{% url 'history' %}'">Історія</button>
+<!--            <button class="tablinks" onclick="openMenu(event, 'editor')">Редактирование</button>-->
+<!--            <button class="tablinks" onclick="openMenu(event, 'add')">Добавление</button>-->
+<!--            <button class="tablinks" onclick="openMenu(event, 'delete')">Удаление</button>-->
+        {% endif %}
+    </div>
+
+<!--content--> 
+
+    <div id="workers" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>Прізвище</th>
+                <th>Ім'я</th>
+                <th>Посада</th>
+                <th>Локація</th>
+                <th>Телефон</th>
+            </tr>
+            {% for worker in workers %}
+                <tr class="content">
+                    <td>{{ worker.surname }}</td>
+                    <td>{{ worker.name }}</td>
+                    <td>{{ worker.job_position }}</td>
+                    <td>{{ worker.location.name }}, {{ worker.location.city}}</td>
+                    <td>{{ worker.work_phone }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="items" class="tabcontent">
+        {% for item_name in items_name%}
+            <button class='item_btn' onclick="window.location.href='{% url "items_list" pk=item_name %}';">{{ item_name }}</button>
+        {%endfor%}
+    </div>
+
+    <div id="locations" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>Назва</th>
+                <th>Відповідальний</th>
+                <th>Адреса</th>
+                <th>Місто</th>
+            </tr>
+            {% for location in locations %}
+                <tr class="content">
+                    <td>{{ location.name }}</td>
+                    <td>
+                        {% for worker in workers %}
+                            {% if worker.location == location %}
+                                <a href="{% url 'worker_items_list' pk=worker.id %}">{{ worker }} <br>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ location.address }}</td>
+                    <td>{{ location.city }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="stock" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>Назва</th>
+                <th>Модель</th>
+                <th>Серійний номер</th>
+                <th>Ціна</th>
+                <th>Дата купівлі</th>
+            </tr>
+            {% for item in items %}
+                {% if item.is_reserve is True %}
+                    <tr class="content">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.model }}</td>
+                        <td>{{ item.serial }}</td>
+                        <td>{{ item.price }}</td>
+                        <td>{{ item.date_of_purchase }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="decommissioned" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>Назва</th>
+                <th>Модель</th>
+                <th>Серійний номер</th>
+                <th>Ціна</th>
+                <th>Дата купівлі</th>
+                <th>Дата списання</th>
+            </tr>
+            {% for item in items %}
+                {% if item.is_decommissioned is True %}
+                    <tr class="content decommissioned">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.model }}</td>
+                        <td>{{ item.serial }}</td>
+                        <td>{{ item.price }}</td>
+                        <td>{{ item.date_of_purchase }}</td>
+                        <td>{{ item.date_of_decommissioned }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+
+
+<!--    <div id="editor" class="tabcontent">-->
+<!--        <h3>Редактирование</h3>-->
+<!--        <p>Tokyo is the capital of Japan.</p>-->
+<!--    </div>-->
+
+
+<!--    <div id="delete" class="tabcontent">-->
+<!--        <h3>Удаление</h3>-->
+<!--        <p>Tokyo is the capital of Japan.</p>-->
+<!--    </div>-->
+{% endblock %}
+
+<script>
+    {% block script %}
+
+        function openMenu(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+
+    {% endblock %}
+</script>

@@ -1,0 +1,507 @@
+{% extends "invent/base.html" %}
+
+{%load static%}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'invent/css/inventaryzation.css' %}">
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+
+    <!--header button-->
+    <div class="menu">
+        <button class="return_btn" onclick="window.location.href='{% url 'home' %}'">Назад</button>
+        <button class="add_new" onclick="window.location.href='{% url 'inv_add_new_item' %}'">Додати об'єкти</button>
+        <button class="upload" onclick="window.location.href='{% url 'download' %}'">Вивантажити у файл</button>
+    </div>
+
+    <!--Menu buttons-->
+    <div class="tab">
+        <button class="tablinks" onclick="openMenu(event, 'all')" id="defaultOpen">Загальна</button>
+        <button class="tablinks" onclick="openMenu(event, 'car')">Авто</button>
+        <button class="tablinks" onclick="openMenu(event, 'furniture')">Меблі</button>
+        <button class="tablinks" onclick="openMenu(event, 'buldding')">Будівлі</button>
+        <button class="tablinks" onclick="openMenu(event, 'office_equipment')">Орг.техніка</button>
+        <button class="tablinks" onclick="openMenu(event, 'periphery')">Периферія</button>
+        <button class="tablinks" onclick="openMenu(event, 'PC_and_laptops')">Ноутбуки та ПК</button>
+        <button class="tablinks" onclick="openMenu(event, 'smartphone_and_tablet')">Смартфони та планшети</button>
+        <button class="tablinks" onclick="openMenu(event, 'warehouse_equipment')">Складське обладнання</button>
+        <button class="tablinks" onclick="openMenu(event, 'interior_items')">Предмети інтерєру</button>
+    </div>
+
+    <!--content--> 
+
+    <div id="all" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>№п/п</th>
+                <th>Група мат. активу</th>
+                <th>Назва мат. активу</th>
+                <th>Модель</th>
+                <th>Серійний номер / VIN-авто</th>
+                <th>Інвентарний номер немат. активу</th>
+                <th>Місце знаходження немат. активу</th>
+                <th>Матеріально відповідальна особа</th>
+                <th>Опис</th>
+                <th>Ціна придбання з ПДВ</th>
+                <th>Дата придбання</th>
+                <th>Ринкова ціна на дату постановки активу на облік, якщо ціна придбання невідома</th>
+                <th>Дата оприбуткування при інвентаризації, якщо дата придбання невідома</th>
+            </tr>
+            {% for item in all_items %}
+                <tr class="content">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.group }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.model }}</td>
+                    <td>{{ item.serial }}</td>
+                    <td>{{ item.inv_numb }}</td>
+                    <td>{{ item.location }}</td>
+                    <td>{{ item.responsible }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.price }}</td>
+                    {% if item.date_of_purchase != None %}
+                        <td>{{ item.date_of_purchase }}</td>
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                    <td>{{ item.market_price }}</td>
+                    {% if item.date_of_registration != None %}
+                        <td>{{ item.date_of_registration }}</td>    
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="car" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>№п/п</th>
+                <th>Група мат. активу</th>
+                <th>Назва мат. активу</th>
+                <th>Модель</th>
+                <th>Серійний номер / VIN-авто</th>
+                <th>Інвентарний номер немат. активу</th>
+                <th>Місце знаходження немат. активу</th>
+                <th>Матеріально відповідальна особа</th>
+                <th>Опис</th>
+                <th>Ціна придбання з ПДВ</th>
+                <th>Дата придбання</th>
+                <th>Ринкова ціна на дату постановки активу на облік, якщо ціна придбання невідома</th>
+                <th>Дата оприбуткування при інвентаризації, якщо дата придбання невідома</th>
+            </tr>
+            {% for car in all_cars %}
+                <tr class="content">
+                    <td>{{ car.id }}</td>
+                    <td>{{ car.group }}</td>
+                    <td>{{ car.name }}</td>
+                    <td>{{ car.model }}</td>
+                    <td>{{ car.serial }}</td>
+                    <td>{{ car.inv_numb }}</td>
+                    <td>{{ car.location }}</td>
+                    <td>{{ car.responsible }}</td>
+                    <td>{{ car.description }}</td>
+                    <td>{{ car.price }}</td>
+                    {% if car.date_of_purchase != None %}
+                        <td>{{ car.date_of_purchase }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                    <td>{{ car.market_price }}</td>
+                    {% if car.date_of_registration != None %}
+                        <td>{{ car.date_of_registration }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="furniture" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>№п/п</th>
+                <th>Група мат. активу</th>
+                <th>Назва мат. активу</th>
+                <th>Модель</th>
+                <th>Серійний номер / VIN-авто</th>
+                <th>Інвентарний номер немат. активу</th>
+                <th>Місце знаходження немат. активу</th>
+                <th>Матеріально відповідальна особа</th>
+                <th>Опис</th>
+                <th>Ціна придбання з ПДВ</th>
+                <th>Дата придбання</th>
+                <th>Ринкова ціна на дату постановки активу на облік, якщо ціна придбання невідома</th>
+                <th>Дата оприбуткування при інвентаризації, якщо дата придбання невідома</th>
+            </tr>
+            {% for furniture in all_furnitures %}
+                <tr class="content">
+                    <td>{{ furniture.id }}</td>
+                    <td>{{ furniture.group }}</td>
+                    <td>{{ furniture.name }}</td>
+                    <td>{{ furniture.model }}</td>
+                    <td>{{ furniture.serial }}</td>
+                    <td>{{ furniture.inv_numb }}</td>
+                    <td>{{ furniture.location }}</td>
+                    <td>{{ furniture.responsible }}</td>
+                    <td>{{ furniture.description }}</td>
+                    <td>{{ furniture.price }}</td>
+                    {% if furniture.date_of_purchase != None %}
+                        <td>{{ furniture.date_of_purchase }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                    <td>{{ furniture.market_price }}</td>
+                    {% if furniture.date_of_registration != None %}
+                        <td>{{ furniture.date_of_registration }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="buldding" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>№п/п</th>
+                <th>Група мат. активу</th>
+                <th>Назва мат. активу</th>
+                <th>Модель</th>
+                <th>Серійний номер / VIN-авто</th>
+                <th>Інвентарний номер немат. активу</th>
+                <th>Місце знаходження немат. активу</th>
+                <th>Матеріально відповідальна особа</th>
+                <th>Опис</th>
+                <th>Ціна придбання з ПДВ</th>
+                <th>Дата придбання</th>
+                <th>Ринкова ціна на дату постановки активу на облік, якщо ціна придбання невідома</th>
+                <th>Дата оприбуткування при інвентаризації, якщо дата придбання невідома</th>
+            </tr>
+            {% for buldding in all_bulddings %}
+                <tr class="content">
+                    <td>{{ buldding.id }}</td>
+                    <td>{{ buldding.group }}</td>
+                    <td>{{ buldding.name }}</td>
+                    <td>{{ buldding.model }}</td>
+                    <td>{{ buldding.serial }}</td>
+                    <td>{{ buldding.inv_numb }}</td>
+                    <td>{{ buldding.location }}</td>
+                    <td>{{ buldding.responsible }}</td>
+                    <td>{{ buldding.description }}</td>
+                    <td>{{ buldding.price }}</td>
+                    {% if buldding.date_of_purchase != None %}
+                        <td>{{ buldding.date_of_purchase }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                    <td>{{ buldding.market_price }}</td>
+                    {% if buldding.date_of_registration != None %}
+                        <td>{{ buldding.date_of_registration }}</td>
+                    {% else %}
+                        <td> - <td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="office_equipment" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>№п/п</th>
+                <th>Група мат. активу</th>
+                <th>Назва мат. активу</th>
+                <th>Модель</th>
+                <th>Серійний номер / VIN-авто</th>
+                <th>Інвентарний номер немат. активу</th>
+                <th>Місце знаходження немат. активу</th>
+                <th>Матеріально відповідальна особа</th>
+                <th>Опис</th>
+                <th>Ціна придбання з ПДВ</th>
+                <th>Дата придбання</th>
+                <th>Ринкова ціна на дату постановки активу на облік, якщо ціна придбання невідома</th>
+                <th>Дата оприбуткування при інвентаризації, якщо дата придбання невідома</th>
+            </tr>
+            {% for office_equipment in all_office_equipments %}
+                <tr class="content">
+                    <td>{{ office_equipment.id }}</td>
+                    <td>{{ office_equipment.group }}</td>
+                    <td>{{ office_equipment.name }}</td>
+                    <td>{{ office_equipment.model }}</td>
+                    <td>{{ office_equipment.serial }}</td>
+                    <td>{{ office_equipment.inv_numb }}</td>
+                    <td>{{ office_equipment.location }}</td>
+                    <td>{{ office_equipment.responsible }}</td>
+                    <td>{{ office_equipment.description }}</td>
+                    <td>{{ office_equipment.price }}</td>
+                    {% if office_equipment.date_of_purchase != None %}
+                        <td>{{ office_equipment.date_of_purchase }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                    <td>{{ office_equipment.market_price }}</td>
+                    {% if office_equipment.date_of_registration != None %}
+                        <td>{{ office_equipment.date_of_registration }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="periphery" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>№п/п</th>
+                <th>Група мат. активу</th>
+                <th>Назва мат. активу</th>
+                <th>Модель</th>
+                <th>Серійний номер / VIN-авто</th>
+                <th>Інвентарний номер немат. активу</th>
+                <th>Місце знаходження немат. активу</th>
+                <th>Матеріально відповідальна особа</th>
+                <th>Опис</th>
+                <th>Ціна придбання з ПДВ</th>
+                <th>Дата придбання</th>
+                <th>Ринкова ціна на дату постановки активу на облік, якщо ціна придбання невідома</th>
+                <th>Дата оприбуткування при інвентаризації, якщо дата придбання невідома</th>
+            </tr>
+            {% for periphery in all_peripheres %}
+                <tr class="content">
+                    <td>{{ periphery.id }}</td>
+                    <td>{{ periphery.group }}</td>
+                    <td>{{ periphery.name }}</td>
+                    <td>{{ periphery.model }}</td>
+                    <td>{{ periphery.serial }}</td>
+                    <td>{{ periphery.inv_numb }}</td>
+                    <td>{{ periphery.location }}</td>
+                    <td>{{ periphery.responsible }}</td>
+                    <td>{{ periphery.description }}</td>
+                    <td>{{ periphery.price }}</td>
+                    {% if periphery.date_of_purchase != None %}
+                        <td>{{ periphery.date_of_purchase }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                    <td>{{ periphery.market_price }}</td>
+                    {% if periphery.date_of_registration != None %}
+                        <td>{{ periphery.date_of_registration }}</td>
+                    {% else %}
+                        <td> - <td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="PC_and_laptops" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>№п/п</th>
+                <th>Група мат. активу</th>
+                <th>Назва мат. активу</th>
+                <th>Модель</th>
+                <th>Серійний номер / VIN-авто</th>
+                <th>Інвентарний номер немат. активу</th>
+                <th>Місце знаходження немат. активу</th>
+                <th>Матеріально відповідальна особа</th>
+                <th>Опис</th>
+                <th>Ціна придбання з ПДВ</th>
+                <th>Дата придбання</th>
+                <th>Ринкова ціна на дату постановки активу на облік, якщо ціна придбання невідома</th>
+                <th>Дата оприбуткування при інвентаризації, якщо дата придбання невідома</th>
+            </tr>
+            {% for PC_and_laptop in all_PC_and_laptops %}
+                <tr class="content">
+                    <td>{{ PC_and_laptop.id }}</td>
+                    <td>{{ PC_and_laptop.group }}</td>
+                    <td>{{ PC_and_laptop.name }}</td>
+                    <td>{{ PC_and_laptop.model }}</td>
+                    <td>{{ PC_and_laptop.serial }}</td>
+                    <td>{{ PC_and_laptop.inv_numb }}</td>
+                    <td>{{ PC_and_laptop.location }}</td>
+                    <td>{{ PC_and_laptop.responsible }}</td>
+                    <td>{{ PC_and_laptop.description }}</td>
+                    <td>{{ PC_and_laptop.price }}</td>
+                    {% if PC_and_laptop.date_of_purchase != None %}
+                        <td>{{ PC_and_laptop.date_of_purchase }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                    <td>{{ PC_and_laptop.market_price }}</td>
+                    {% if PC_and_laptop.date_of_registration != None %}
+                        <td>{{ PC_and_laptop.date_of_registration }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="smartphone_and_tablet" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>№п/п</th>
+                <th>Група мат. активу</th>
+                <th>Назва мат. активу</th>
+                <th>Модель</th>
+                <th>Серійний номер / VIN-авто</th>
+                <th>Інвентарний номер немат. активу</th>
+                <th>Місце знаходження немат. активу</th>
+                <th>Матеріально відповідальна особа</th>
+                <th>Опис</th>
+                <th>Ціна придбання з ПДВ</th>
+                <th>Дата придбання</th>
+                <th>Ринкова ціна на дату постановки активу на облік, якщо ціна придбання невідома</th>
+                <th>Дата оприбуткування при інвентаризації, якщо дата придбання невідома</th>
+            </tr>
+            {% for smartphone_and_tablet in all_smartphone_and_tablet %}
+                <tr class="content">
+                    <td>{{ smartphone_and_tablet.id }}</td>
+                    <td>{{ smartphone_and_tablet.group }}</td>
+                    <td>{{ smartphone_and_tablet.name }}</td>
+                    <td>{{ smartphone_and_tablet.model }}</td>
+                    <td>{{ smartphone_and_tablet.serial }}</td>
+                    <td>{{ smartphone_and_tablet.inv_numb }}</td>
+                    <td>{{ smartphone_and_tablet.location }}</td>
+                    <td>{{ smartphone_and_tablet.responsible }}</td>
+                    <td>{{ smartphone_and_tablet.description }}</td>
+                    <td>{{ smartphone_and_tablet.price }}</td>
+                    {% if smartphone_and_tablet.date_of_purchase != None%}
+                        <td>{{ smartphone_and_tablet.date_of_purchase }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                    <td>{{ smartphone_and_tablet.market_price }}</td>
+                    {% if smartphone_and_tablet.date_of_registration != None %}
+                        <td>{{ smartphone_and_tablet.date_of_registration }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="warehouse_equipment" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>№п/п</th>
+                <th>Група мат. активу</th>
+                <th>Назва мат. активу</th>
+                <th>Модель</th>
+                <th>Серійний номер / VIN-авто</th>
+                <th>Інвентарний номер немат. активу</th>
+                <th>Місце знаходження немат. активу</th>
+                <th>Матеріально відповідальна особа</th>
+                <th>Опис</th>
+                <th>Ціна придбання з ПДВ</th>
+                <th>Дата придбання</th>
+                <th>Ринкова ціна на дату постановки активу на облік, якщо ціна придбання невідома</th>
+                <th>Дата оприбуткування при інвентаризації, якщо дата придбання невідома</th>
+            </tr>
+            {% for warehouse_equipment in all_warehouse_equipment %}
+                <tr class="content">
+                    <td>{{ warehouse_equipment.id }}</td>
+                    <td>{{ warehouse_equipment.group }}</td>
+                    <td>{{ warehouse_equipment.name }}</td>
+                    <td>{{ warehouse_equipment.model }}</td>
+                    <td>{{ warehouse_equipment.serial }}</td>
+                    <td>{{ warehouse_equipment.inv_numb }}</td>
+                    <td>{{ warehouse_equipment.location }}</td>
+                    <td>{{ warehouse_equipment.responsible }}</td>
+                    <td>{{ warehouse_equipment.description }}</td>
+                    <td>{{ warehouse_equipment.price }}</td>
+                    {% if warehouse_equipment.date_of_purchase != None %}
+                        <td>{{ warehouse_equipment.date_of_purchase }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                    <td>{{ warehouse_equipment.market_price }}</td>
+                    {% if warehouse_equipment.date_of_registration != None %}
+                        <td>{{ warehouse_equipment.date_of_registration }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div id="interior_items" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>№п/п</th>
+                <th>Група мат. активу</th>
+                <th>Назва мат. активу</th>
+                <th>Модель</th>
+                <th>Серійний номер / VIN-авто</th>
+                <th>Інвентарний номер немат. активу</th>
+                <th>Місце знаходження немат. активу</th>
+                <th>Матеріально відповідальна особа</th>
+                <th>Опис</th>
+                <th>Ціна придбання з ПДВ</th>
+                <th>Дата придбання</th>
+                <th>Ринкова ціна на дату постановки активу на облік, якщо ціна придбання невідома</th>
+                <th>Дата оприбуткування при інвентаризації, якщо дата придбання невідома</th>
+            </tr>
+            {% for interior_items in all_interior_items %}
+                <tr class="content">
+                    <td>{{ interior_items.id }}</td>
+                    <td>{{ interior_items.group }}</td>
+                    <td>{{ interior_items.name }}</td>
+                    <td>{{ interior_items.model }}</td>
+                    <td>{{ interior_items.serial }}</td>
+                    <td>{{ interior_items.inv_numb }}</td>
+                    <td>{{ interior_items.location }}</td>
+                    <td>{{ interior_items.responsible }}</td>
+                    <td>{{ interior_items.description }}</td>
+                    <td>{{ interior_items.price }}</td>
+                    {% if interior_items.date_of_purchase != None %}
+                        <td>{{ interior_items.date_of_purchase }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                    <td>{{ interior_items.market_price }}</td>
+                    {% if interior_items.date_of_registration != None %}
+                        <td>{{ interior_items.date_of_registration }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+    function openMenu(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+
+{% endblock %}

@@ -1,0 +1,90 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    display: list-item;
+    width: 100;
+    height: 110vh;
+    background-image: url('../image/background.jpg');
+}
+.logo_iris {
+    margin: auto auto;
+    display: flex;
+    width: 30%;
+    height: 25%;
+    animation: logo_anim;
+    animation-duration: 0.9s;
+}
+@keyframes logo_anim {
+    from {
+        transform: translateY(-600px);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    to {
+        transform: translateY(0px);
+    }
+}
+.logo_iris svg {
+    margin: auto auto;
+}
+.main_class {
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    transition: all 0.8s;
+    animation: main_class_anim;
+    animation-duration: 0.9s;
+}
+@keyframes main_class_anim {
+    from {
+        transform: translateY(600px);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    to {
+        transform: translateY(0px);
+    }
+}
+
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+label {
+    color: white;
+}
+
+/* Set a style for all buttons */
+.enter {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.enter:hover {
+    opacity: 0.8;
+}
+
+form {
+    width: 300px;
+    margin: 20px auto;
+}
+
+.return{
+    background: rgb(233, 68, 68);
+    border: none;
+    border-radius: 5px;
+}

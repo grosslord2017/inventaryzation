@@ -1,0 +1,150 @@
+{% extends "inventaryzation/base.html" %}
+
+{% load static %}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'inventaryzation/css/utilization.css' %}">   
+{% endblock %}
+
+
+{% block style %}
+{% endblock %}
+
+
+{% block body %}
+    
+    <div class="search-block">
+        <button class="back_button" onclick="window.location.href='/inventaryzation'">Назад</button>
+        <input class="search" type="search" placeholder="серійний номер чи модель">
+        <button class="submit" type="submit" form="form">Списати</button>1
+    </div>
+
+    <form id="form" method="POST" action="utilization">
+        {% csrf_token%}
+        <div class="form-body">
+        </div>
+    </form>
+
+    <script>
+        const searchURL = "{% url 'search' %}";
+        const csrfToken = "{{ csrf_token }}";
+        const input = document.querySelector(".search");
+        const form = document.querySelector("form");
+        const formBody = document.querySelector(".form-body");
+        const button = document.createElement("button");
+        const header = document.querySelector(".search-block");
+
+
+        //ajax запрос на живой поиск итемов по модели или серийному номеру
+        input.addEventListener("input", () => {
+            const item = input.value;
+
+            formBody.innerHTML = "";
+
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("POST", searchURL);
+            xmlhttp.setRequestHeader("X-CSRFToken", csrfToken);
+            xmlhttp.send(JSON.stringify({item: item}));
+
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    const response = JSON.parse(this.responseText);
+                    const items = response['items_list'];
+
+                    formatDOM(items);
+
+                };
+            };
+            
+        });
+
+        // формирование формы по выводу итемов на списание
+        function formatDOM(list_el) {
+            //console.log(list_el);
+            
+            for (let i=0; i<list_el.length; i++) {
+                let divInfo = document.createElement("div");
+                divInfo.classList.add("item");
+                let inp = document.createElement("input");
+                inp.type = "checkbox";
+                inp.name = "invent_numb";
+                inp.classList.add("check_input");
+                inp.value = list_el[i][5];
+                divInfo.appendChild(inp);
+
+                let divBlock = document.createElement("div");
+                divBlock.classList.add("block");
+
+                let divInput = document.createElement("div");
+                divInput.classList.add("description");
+                let inputDescription = document.createElement("input");
+                inputDescription.name = "description";
+                inputDescription.id = list_el[i][5];
+                inputDescription.placeholder = "Вкажіть причину списання";
+                inputDescription.hidden = true;
+                divInput.appendChild(inputDescription);
+
+                for (let j=0; j<list_el[i].length-2; j++) {
+                    //console.log(list_el[i]);
+                    let p = document.createElement("p");
+                    if (j === 0 || j === 1 || j === 3 || j === 8) {
+                        continue;
+                    } else if (j === 2) { //имя + модель
+                        p.innerHTML = list_el[i][j] + ' ' + list_el[i][j+1];
+                        p.classList.add("bold");
+                        divInfo.appendChild(p);
+                    } else if (j === 9) {
+                        if (list_el[i][9] === 0) { // price
+                            p.innerHTML = list_el[i][11] + ' грн';
+                        } else {
+                            p.innerHTML = list_el[i][j] + ' грн';
+                        };
+                        divInfo.appendChild(p);
+                    } else if (j === 10) {
+                        if (list_el[i][10] === null) { // date
+                            p.innerHTML = list_el[i][12];
+                        } else {
+                            p.innerHTML = list_el[i][j];
+                        };
+                        divInfo.appendChild(p);
+                    } else if (j === 4) { // серийный номер
+                        p.innerHTML = "Серійний номер: " + list_el[i][j]
+                        divInfo.appendChild(p);
+                    } else if (j === 5) { // интвентарный номер
+                        p.innerHTML = "Інвентарний номер: " + list_el[i][j]
+                        divInfo.appendChild(p);
+                    } else {
+                        p.innerHTML = list_el[i][j]
+                        divInfo.appendChild(p);
+                    };
+
+                };
+                divBlock.appendChild(divInfo);
+                divBlock.appendChild(divInput);
+
+                
+                formBody.appendChild(divBlock);
+                
+            };
+
+            //показ/скрытие инпута при нажатии на чекбокс
+            const checkbox = document.querySelectorAll(".check_input");
+            checkbox.forEach(check => check.addEventListener('click', ()=> {
+                let invent_numb = check.value;
+                let input = document.getElementById(invent_numb);
+                if (input.hidden == true) {
+                    input.hidden = false;
+                    input.required = true; // делаем описание обязательным для выбраного элемента
+                } else {
+                    input.hidden = true;
+                    input.required = false;
+                };
+
+            }));
+
+        };
+        
+
+    </script>
+
+{% endblock %}
+

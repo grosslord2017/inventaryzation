@@ -1,0 +1,17 @@
+{% extends "invent/base.html" %}
+
+{%load static%}
+{% block static_files %}
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+    <form method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token%}
+        {{ download_form.as_p}}
+        
+        <button class="submit" type="submit">Додати</button>
+    </form>
+{% endblock %}

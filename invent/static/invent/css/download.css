@@ -1,0 +1,62 @@
+.return_btn {
+    margin: 10px auto;
+    display: block;
+    background: #B22222;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 10px;
+    width: 30%;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.return_btn:hover {
+    background: #F08080;
+}
+
+form {
+    border: 1px solid grey;
+    border-radius: 5px;
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+    padding: 10px;
+}
+
+h2 {
+    text-align: center;
+}
+
+p {
+    margin-left: 20px;
+}
+
+label {
+    font-size: 25px;
+    margin-left: 20px;
+}
+
+input {
+    transform: scale(2);
+}
+
+.submit {
+    background: #228b22;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    width: 100%;
+    padding: 12px 30px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.submit:hover {
+    background: #90ee90;
+}
+
+.line-through {
+    text-decoration: line-through;
+}

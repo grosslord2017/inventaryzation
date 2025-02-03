@@ -1,0 +1,269 @@
+{% extends "inventaryzation/base.html" %}
+
+{%load static%}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'inventaryzation/css/inventaryzation.css' %}">
+    <link rel="stylesheet" href="{% static 'inventaryzation/css/download.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="{% static 'inventaryzation/js/inventaryzation.js' %}"></script>
+    <script src="{% static 'inventaryzation/js/download.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="http://momentjs.com/downloads/moment.js"></script>
+    <script src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+
+    <!--header button-->
+    <div class="menu">
+        <button class="return_btn" onclick="window.location.href='{% url 'home_page' %}'">Назад</button>
+        <button class="add_new" onclick="window.location.href='{% url 'inv_add_new_item' %}'">Додати об'єкти</button>
+        <button class="upload" id="myBtn">Вивантажити у файл</button>
+        <form action="" method="post">
+            {% csrf_token %}
+            <input id="search_inv" class="search" type="text" name="search" placeholder="інвентарний номер або прізвище">
+        </form>
+            <button class="jurnal" onclick="window.location.href='{% url 'jurnal' %}'">Історія</button>
+            <button class="acts" onclick="window.location.href='{% url 'all_acts' %}'">Акти</button>
+        {% if user.is_superuser %}
+            <button class="barcode" onclick="window.location.href='{% url 'generate_inventar_number' %}'">
+                Генератор штрих-кодів
+            </button>
+        {% endif %}
+        <button class="change-responsible" onclick="window.location.href='{% url 'change_responsible' %}'">Зміна МВО</button>
+        <button class="utiltzation" onclick="window.location.href='{% url 'utilization' %}'">Списання</button>
+        <button class="logout" onclick="window.location.href='{% url 'logout' %}'">Вихід</button>
+    </div>
+
+    <!--Menu buttons-->
+    <div class="tab menu-container">
+        <button class="" onclick="window.location.reload()" id="defaultOpen">Загальна</button>
+        <div class="dropdown">
+            <button class="dropbtn">Групи</button>
+            <div class="dropdown-content group">
+                {% for group in groups %}
+                    <button class="tablinks" onclick="getGroup('{{group}}')">{{ group }}</button>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">Локація</button>
+            <div class="dropdown-content location">
+                {% for location in locations %}
+                    <button class="tablinks" onclick="getLocation('{{location}}')">{{ location }}</button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Ціна придбання</button><!--форма для ввода сумма от и до (диапазон)-->
+            <div class="dropdown-content">
+                <div class="filter-interval">
+                    <h3>Діапазон цін:</h3>
+                    <form>
+                        <div class="range">
+                            <label>Від: </label>
+                            <input class="price" type="number" min="1" value="1">
+
+                            <label>До:</label>
+                            <input class="price" type="number" min="1" value="1">
+                        </div>
+                        <div class="form_btn">
+                            <button class="btn-accent" type="reset">Скинути</button>
+                            <button class="btn-accent" type="button" onclick="getPrice()">Примінити</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Дата придбання</button><!--с и до какой даты делать выборку-->
+            <div class="dropdown-content date-content">
+                <div class="range_date">
+                    <h3>Діапазон дат:</h3>
+                    <form>
+                        <div class="range">
+                            <input class="middle-input" type="date" name="date" required>
+                            <input class="middle-input" type="date" name="date" required>
+                        </div>
+                        <div class="form_btn">
+                            <button class="btn-accent" type="reset">Скинути</button>
+                            <button class="btn-accent" type="button" onclick="getDate()">Примінити</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--content--> 
+
+    <div id="all" class="tabcontent">
+        <table>
+            <tr class="heder">
+                <th>№п/п</th>
+                <th>Група мат. активу</th>
+                <th>Назва мат. активу</th>
+                <th>Модель</th>
+                <th>Серійний номер / VIN-авто</th>
+                <th>Інвентарний номер немат. активу</th>
+                <th>Місце знаходження немат. активу</th>
+                <th>Матеріально відповідальна особа</th>
+                <th class="subscription">Опис</th>
+                <th>Ціна придбання з ПДВ</th>
+                <th>Дата придбання</th>
+                <th>Ринкова ціна на дату постановки активу на облік, якщо ціна придбання невідома</th>
+                <th>Дата оприбуткування при інвентаризації, якщо дата придбання невідома</th>
+            </tr>
+            {% for item in all_items %}
+                <tr class="content">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.group }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.model }}</td>
+                    <td>{{ item.serial }}</td>
+                    <td>{{ item.inv_numb }}</td>
+                    <td>{{ item.location }}</td>
+                    <td>{{ item.responsible }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.price }}</td>
+                    {% if item.date_of_purchase != None %}
+                        <td>{{ item.date_of_purchase }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                    <td>{{ item.market_price }}</td>
+                    {% if item.date_of_registration != None %}
+                        <td>{{ item.date_of_registration }}</td>    
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <div id="ModalDownload" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">×</span>
+            {% include "inventaryzation/download.html" %}
+        </div>
+    </div>
+
+    
+    <script>
+
+        const input_inv = document.getElementById('search_inv');        
+        const searchURL = "{% url 'search' %}";
+        const filterLocationURL = "{% url 'filter_location' %}";
+        const filterGroupURL = "{% url 'filter_group' %}";
+        const filterDateURL = "{% url 'filter_date' %}";
+        const filterPriceURL = "{% url 'filter_price' %}";
+        const csrfToken = '{{ csrf_token }}';
+        const table = document.getElementById('all');
+
+        /* живой поиск по инвентраному номеру или фамилии или серийному номеру */
+        document.getElementById('search_inv').onkeyup = function () {
+            clearTable();
+            getAjax(input_inv.value, searchURL);
+        };
+
+        /* фильтр по локациям */
+        function getLocation(val) {
+            clearTable();
+            getAjax(val, filterLocationURL);
+        };
+
+        /* фильтр по групам */
+        function getGroup(val) {
+            clearTable();
+            getAjax(val, filterGroupURL);
+        };
+
+        /* фильтр по цене */
+        function getPrice() {
+            let price = document.getElementsByClassName("price")
+            price = [price[0].value, price[1].value];
+            clearTable();
+            getAjax(price, filterPriceURL);
+        }
+        
+
+        /* фильтр с и до определенных дат включительно */
+        function getDate() {
+            let dates = document.getElementsByClassName("middle-input");
+            dates = [dates[0].value, dates[1].value];
+            clearTable();
+            getAjax(dates, filterDateURL);
+        }
+
+        /* формирование ajax запроса */
+        function getAjax(date, URL) {
+            const item = date;
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("POST", URL);
+            xmlhttp.setRequestHeader("X-CSRFToken", csrfToken);
+            xmlhttp.send(JSON.stringify({item: item}));
+
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    var response = JSON.parse(this.responseText);
+                    var items = response['items_list'];
+
+                    search(items);
+                };
+            };
+        };
+        
+        /* очистка таблицы перед выводом фильтра */
+        function clearTable() {
+            let content = table.getElementsByClassName('content');
+            while (content.length !== 0) {
+                content[0].remove();
+            };
+        };
+
+
+        /* формирование таблицы результатами поиска при фильтрации с использованием jQuery */
+        function search(items) {
+            for (let i=0; i<items.length; i++) {
+                $('<tr></tr>').attr({"class":"content", "id":i}).appendTo('#all tbody');
+                for (let j=0; j<items[i].length; j++) {
+                    if (items[i][j] !== null){
+                        
+                        //formating date in cell 10 and 12
+                        if (j == 10 || j == 12) {
+                            let uk_date = moment(items[i][j]).locale("uk").format("DD MMMM YYYY");
+                            $('<td>' + uk_date + '</td>').appendTo('#' + i);
+                            continue;
+                        };
+                        
+                        //formating price in float format
+                        if ((j == 9 || j == 11) && Number.isInteger(items[i][j])) {
+                            $('<td>' + items[i][j] + ',0' + '</td>').appendTo('#' + i);
+                            continue;
+                        };
+
+                        $('<td>' + items[i][j] + '</td>').appendTo('#' + i);
+                    } else {
+                        $('<td>' + '-' + '</td>').appendTo('#' + i);
+                    }
+                };
+            };
+        };
+        
+        
+
+    </script>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

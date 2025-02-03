@@ -1,0 +1,88 @@
+<form method="POST" action="{% url 'download' %}">
+    {% csrf_token %}
+
+    <h2>Які категорії вивантажити:</h2>
+    <p class='row'>
+        <input id="all_items" type="checkbox" name="all_items">
+        <label for="all_items">Всі об'єкти</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="accademy" type="checkbox" name="accademy">
+        <label class="through" for="accademy">Академія (Київ)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="kiev_office" type="checkbox" name="kiev_office">
+        <label class="through" for="kiev_office">Київський офіс</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="shop_riverMall" type="checkbox" name="shop_riverMall">
+        <label class="through" for="shop_riverMall">Магазин Рівер Мол</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="shop_shevchenko390" type="checkbox" name="shop_shevchenko390">
+        <label class="through" for="shop_shevchenko390">Іріс (магазин Іріс, Шевченка 390)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="shop_doshkevicha19" type="checkbox" name="shop_doshkevicha19">
+        <label class="through" for="shop_doshkevicha19">Магазин Дашкевича 19</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="shop_sumgaitskaya39" type="checkbox" name="shop_sumgaitskaya39">
+        <label class="through" for="shop_sumgaitskaya39">Магазин Сумгаїтська 39</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="che_basement_buh" type="checkbox" name="che_basement_buh">
+        <label class="through" for="che_basement_buh">Черкаський офіс (каб. Сиром"ятникової)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="che_basement_other" type="checkbox" name="che_basement_other">
+        <label class="through" for="che_basement_other">Черкаський офіс (конференц зала+коридор у підвалі)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="che_basement_sys" type="checkbox" name="che_basement_sys">
+        <label class="through" for="che_basement_sys">Черкаський офіс (каб. Системного адміністратора)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="che_security" type="checkbox" name="che_security">
+        <label class="through" for="che_security">Черкаський офіс (каб. СБ)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="che_buh" type="checkbox" name="che_buh">
+        <label class="through" for="che_buh">Черкаський офіс (каб. Бухгалтерії)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="che_kitchen" type="checkbox" name="che_kitchen">
+        <label class="through" for="che_kitchen">Черкаський офіс (кухня+кімната відпочинку)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="che_operators" type="checkbox" name="che_operators">
+        <label class="through" for="che_operators">Черкаський офіс (каб. операторів)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="che_server" type="checkbox" name="che_server">
+        <label class="through" for="che_server">Черкаський офіс (серверна)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="che_directors" type="checkbox" name="che_directors">
+        <label class="through" for="che_directors">Черкаський офіс (каб. Директорів)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="warehouse_davines" type="checkbox" name="warehouse_davines">
+        <label class="through" for="warehouse_davines">Основний склад (Давінес, Олвейз)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="warehouse_electric" type="checkbox" name="warehouse_electric">
+        <label class="through" for="warehouse_electric">Основний склад (Інструменти, Барба Італіано)</label>
+    </p>
+    <p class='row'>
+        <input class="category" id="warehouse_estel" type="checkbox" name="warehouse_estel">
+        <label class="through" for="warehouse_estel">Склад митниця</label>
+    </p>
+    
+
+    <button class="submit"><i class="fa fa-download"></i> Завантажити</button>
+</form>
+
+
+<script>
+</script>

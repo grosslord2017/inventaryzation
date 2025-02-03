@@ -1,0 +1,218 @@
+body {
+    height: 100%;
+    background-image: url('../image/background.jpg');
+}
+
+.main_class {
+    display: grid;
+    height: 100%;
+}
+
+.up_title {
+    display: flex;
+    width: 100%;
+    height: 10vh;
+    border-bottom-left-radius: 60px;
+    border-bottom-right-radius: 60px;
+    border-radius: 0 0 60px 60px;
+    background-color: rgba(107, 109, 255, 0.226);
+    animation: up_menu_anim;
+    animation-duration: 0.8s;
+    margin-top: -10px;
+}
+
+.login_button {
+    width: 10%;
+    height: 100%;
+    transition: 0.5s;
+}
+
+.login_button svg{
+    width: 100%;
+    height: 100%;
+}
+
+.login_button:hover{
+    transform: scale(1.5);
+}
+
+@keyframes up_menu_anim {
+    from {
+        transform: translateY(-200px);
+    }
+    to {
+        transform: translateY(0px);
+    }
+}
+
+.logo_iris{
+    margin: auto auto;
+    margin-left: 46.5%;
+    transition: 0.5s;
+}
+
+.logo_iris:hover{
+    transform: scale(1.1);
+}
+
+.route_windows {
+    display: flex;
+    margin-top: 5%;
+    width: 100%;
+    height: 60vh;
+}
+
+.left_window {
+    width: 30%;
+    height: 100%;
+    margin-left: 10%;
+    background-color: rgba(107, 110, 255, 0.288);
+    transition: all 0.5s;
+    animation: left_menu_anim;
+    animation-duration: 0.9s;
+}
+
+@keyframes left_menu_anim {
+    from {
+        transform: translateX(-1000px);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    to {
+        transform: translateX(0px);
+    }
+}
+
+.left_window:hover {
+    background-color: rgba(214, 55, 55, 0.534);
+    transform: translateY(-20px);
+}
+
+.left_window_top {
+    display: flex;
+    width: 100%;
+    height: 20%;
+}
+
+.left_top_title {
+    margin: auto auto;
+    color: white;
+    font-size:30px;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.left_window_middle {
+    display: flex;
+    width: 100%;
+    height: 60%;
+}
+
+.left_window_image {
+    margin: auto auto;
+    display: flex;
+    width: 50%;
+    height: 80%;
+}
+
+.left_window_image svg {
+    margin: auto auto;
+}
+
+.left_window_middle h4 {
+    margin-left: 2%;
+    color: white;
+}
+
+.left_window_bottom {
+    display: flex;
+    width: 100%;
+    height: 20%;
+}
+
+.left_window_bottom a{
+    margin: auto auto;
+    color: white;
+}
+
+.right_window {
+    width: 30%;
+    height: 100%;
+    margin-left: 20%;
+    background-color: rgba(107, 110, 255, 0.288);
+    transition: all 0.5s;
+    animation: right_menu_anim;
+    animation-duration: 0.9s;
+}
+
+@keyframes right_menu_anim {
+    from {
+        transform: translateX(1000px);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    to {
+        transform: translateX(0px);
+    }
+}
+
+.right_window:hover {
+    background-color: rgba(214, 55, 55, 0.534);
+    transform: translateY(-20px);
+}
+
+.right_window_top {
+    display: flex;
+    width: 100%;
+    height: 20%;
+}
+
+.right_top_title {
+    margin: auto auto;
+    color: white;
+    font-size:30px;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.right_window_middle {
+    display: flex;
+    width: 100%;
+    height: 60%;
+}
+
+.right_window_image {
+    margin: auto auto;
+    display: flex;
+    width: 50%;
+    height: 80%;
+}
+
+.right_window_image svg {
+    margin: auto auto;
+}
+
+.right_window_bottom {
+    width: 100%;
+    height: 20%;
+}
+
+.login_text {
+    display: flex;
+    width: 18%;
+    height: 100%;
+    margin-right: 3%;
+}
+
+.login_text p {
+    color: white;
+    margin: auto auto;
+    transform: scale(1.2);
+}
+
+.login_text img{
+    margin-left: 0px;
+    margin-top: auto;
+    margin-bottom: auto;
+    transform: scale(0.8);
+}

@@ -1,0 +1,30 @@
+{% extends "inventaryzation/base.html" %}
+
+{%load static%}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'inventaryzation/css/inv_add_new_item.css' %}">
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div class='btn'>
+        <button class="return_btn" onclick="window.location.href='{% url 'inventaryzation' %}'">Назад</button>
+        <form class="upload_file" method="POST" enctype="multipart/form-data">
+            {% csrf_token%}
+            <input type="file" name="upload" placeholder="xlsx" />
+
+            <button class="submit" type="submit">Додати</button>
+        </form>
+    </div>
+
+    <form class="one_item" method="POST">
+        {% csrf_token %}
+        {{ invent_add_form.as_p }}
+        <button class="submit" type="submit">Додати</button>
+    </form>
+
+{% endblock %}

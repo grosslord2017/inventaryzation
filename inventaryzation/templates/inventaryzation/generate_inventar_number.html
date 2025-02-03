@@ -1,0 +1,85 @@
+{% extends "inventaryzation/base.html" %}
+
+{% load static %}
+{% block static_files %}
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <link rel="stylesheet" href="{% static 'inventaryzation/css/generate_inventar_number.css' %}">
+{% endblock %}
+
+
+{% block style %}
+{% endblock %}
+
+
+{% block body %}
+    <div class="count">
+        <button class="return" type="button" onclick="window.location.href='/inventaryzation'">Назад</button>
+        <input id="quantity">
+        <button id="quantity-button" type="button">Створити</button>
+        <button id="print" type="button" onclick="window.print()">Друк</button>
+    </div>
+    <div class="barcode-list">
+    </div>
+
+    <script>
+
+        const quantityURL = "{% url 'quantity_barcode' %}";
+        const csrfToken = '{{ csrf_token }}';
+        const divBarcodeList = document.querySelector(".barcode-list");
+
+        let button = document.getElementById("quantity-button");
+        button.addEventListener("click", ()=> {
+            let quantity = document.querySelector("#quantity").value;
+
+            getAjax(quantity, quantityURL)
+        });
+
+        
+        function getAjax(date, URL) {
+            const item = date;
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("POST", URL);
+            xmlhttp.setRequestHeader("X-CSRFToken", csrfToken);
+            xmlhttp.send(JSON.stringify({item: item}));
+
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    var response = JSON.parse(this.responseText);
+                    var items = response['items_list'];
+                    
+                    divBarcodeList.innerHTML = '';
+
+                    createBarcode(items);
+                    
+                };
+            };
+        };
+
+        function createBarcode (items) {
+            for (let i=0; i<items.length; i++) {
+                // svg создается исключительно как показано ниже. По другому нелзя, работать не будет.
+                let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.id = `barcode${i}`;
+                svg.setAttribute('jsbarcode-format', 'code128');
+                svg.setAttribute('jsbarcode-value', `${items[i]}`);
+                svg.setAttribute('jsbarcode-height', '60');
+                svg.className.baseVal = "barcode";
+                divBarcodeList.appendChild(svg);
+
+                JsBarcode(`#barcode${i}`).init();
+            };
+        };
+        
+
+        /*JsBarcode("#barcode", "565642", {
+            format: "CODE128",
+            displayValue: true,
+            fontSize: 20,
+            width: 2,
+            height: 100
+        });*/
+
+
+    </script>
+{% endblock %}
